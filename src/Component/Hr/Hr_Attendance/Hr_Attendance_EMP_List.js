@@ -22,19 +22,19 @@ const Hr_Attendance_EMP_List = () => {
             <table className="w-full border border-collapse border-gray-300">
                 <thead>
                     <tr className="bg-gray-200">
-                        <th className="p-2 border border-gray-300">ID</th>
-                        <th className="p-2 border border-gray-300">Name</th>
-                        <th className="p-2 border border-gray-300">Department</th>
-                        <th className="p-2 border border-gray-300">Action</th>
+                        <th className="p-2 border">ID</th>
+                        <th className="p-2 border">Name</th>
+                        <th className="p-2 border">Department</th>
+                        <th className="p-2 border">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {employees.map((employee) => (
                         <tr key={employee.id} className="text-center hover:bg-gray-100">
-                            <td className="p-2 border border-gray-300">{employee.id}</td>
-                            <td className="p-2 border border-gray-300">{employee.name}</td>
-                            <td className="p-2 border border-gray-300">{employee.department}</td>
-                            <td className="p-2 border border-gray-300">
+                            <td className="p-2 border">{employee.id}</td>
+                            <td className="p-2 border">{employee.name}</td>
+                            <td className="p-2 border">{employee.department}</td>
+                            <td className="p-2 border">
                                 <button
                                     onClick={() => handleViewAttendance(employee.id)}
                                     className="px-3 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600"
