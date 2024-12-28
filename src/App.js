@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login from './Component/Auth/Login';
 
@@ -13,31 +13,58 @@ import Emp_WorkReport from './Component/Emp/Emp_WorkReport';
 import Emp_Document from './Component/Emp/Emp_Document';
 import Emp_salary from './Component/Emp/Emp_salary';
 import EmployeeDashboard from './Component/Emp/Emp_Dashboard';
+import SidebarComponent from './Component/Auth/sidebar';
+import ProtectedRoute from './Component/Auth/protectedRoute';
 import Layout from './Component/Auth/Layout';
 
-
 function App() {
+  const [token, setToken] = useState(null);
+
+  // Check for token in sessionStorage when the component mounts
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem('authToken');
+    setToken(storedToken); // Set the token to state
+  }, []); 
+
   return (
-    <Routes>
-      {/* Public Route */}
-      <Route path="/" element={<Login />} />
+    <div className="flex h-screen">
+     
+      {/* {token && <SidebarComponent />} */}
+      <Layout />
+   
+      <div className="flex-1 p-6 overflow-y-auto bg-gray-100">
+        <Routes>
+        
+          <Route path="/" element={<Login />} />
+          {/* Employee Routes */}
+          <Route path="/Dashboard" element={ <ProtectedRoute>
+            <EmployeeDashboard />
+                    </ProtectedRoute>} />
+          <Route path="/Attendance" element={<ProtectedRoute>
+            <Emp_Attendance />
+                    </ProtectedRoute>} />
+          <Route path="/Leave_Managment" element={<ProtectedRoute>
+            <Emp_LeaveManagment />
+                    </ProtectedRoute>} />
+          <Route path="/viewAttendance/:id" element={<ProtectedRoute>
+            <Hr_Attendance_Managment />
+                    </ProtectedRoute>} />
+          <Route path="/Work_Report" element={<ProtectedRoute>
+            <Emp_WorkReport />
+                    </ProtectedRoute>} />
+          <Route path="/Document" element={<ProtectedRoute>
+            <Emp_Document />
+                    </ProtectedRoute>} />
+          <Route path="/salary_Managment" element={<ProtectedRoute>
+            <Emp_salary />
+                    </ProtectedRoute>} />
 
-      {/* Protected Routes with Layout */}
-      <Route element={<Layout />}>
-        {/* emproute */}
-        <Route path="/Dashboard" element={<EmployeeDashboard />} />
-        <Route path="/Attendance" element={<Emp_Attendance />} />
-        <Route path="/Leave_Managment" element={<Emp_LeaveManagment />} />
-        <Route path="/viewAttendance/:id" element={<Hr_Attendance_Managment />} />
-        <Route path="/Work_Report" element={<Emp_WorkReport />} />
-        <Route path="/Document" element={<Emp_Document />} />
-        <Route path="/salary_Managment" element={<Emp_salary />} />
-
-        {/* hrroute */}
-        <Route path="/Employee_Attendance" element={<Hr_Attendance_EMP_List />} />
-        <Route path="/Employee_Details" element={<Hr_AddEMP />} />
-      </Route>
-    </Routes>
+          {/* HR Routes */}
+          <Route path="/Employee_Attendance" element={<Hr_Attendance_EMP_List />} />
+          <Route path="/Employee_Details" element={<Hr_AddEMP />} />
+        </Routes>
+      </div>
+    </div>
   );
 }
 

@@ -2,7 +2,7 @@ import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, Poin
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-
+import CryptoJS from 'crypto-js';
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -13,6 +13,32 @@ const EmployeeDashboard = () => {
     const currentMonth = currentDate.getMonth(); // 0-11 (0 = January, 11 = December)
     const [selectedType, setSelectedType] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [userData, setUserData] = useState(null);
+    console.log(userData,"userdata")
+    const [userRole, setUserRole] = useState(null); // Store the role
+    const SECRET_KEY = 'your-secret-key'; // Same secret key used during login
+
+    useEffect(() => {
+        const encryptedToken = sessionStorage.getItem('authToken');
+        const encryptedUserData = sessionStorage.getItem('userData');
+        console.log("Encrypted Token:", encryptedToken);  // Check if token is in sessionStorage
+        console.log("Encrypted UserData:", encryptedUserData);  // Check if userData is in sessionStorage
+
+        if (encryptedToken && encryptedUserData) {
+            try {
+                const bytes = CryptoJS.AES.decrypt(encryptedUserData, SECRET_KEY);
+                const decryptedUserData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+                setUserData(decryptedUserData);
+                setUserRole(decryptedUserData.role); // Assuming `role` is part of user data
+            } catch (error) {
+                console.error("Decryption failed:", error); // Log if decryption fails
+            }
+        } else {
+            console.log("No user data or token found in sessionStorage");
+        }
+    }, []);
+
 
     const handleTypeChange = (type) => {
         setSelectedType(type);
@@ -76,31 +102,33 @@ const EmployeeDashboard = () => {
         setSelectedType(type);
         setIsModalOpen(true);
     };
-
+    if (!userData) {
+        return <div>Loading...</div>; // Or a placeholder message
+    }
     return (
         <div className="flex min-h-screen bg-gray-50">
             {/* Sidebar */}
 
             {/* Main Content */}
             <div className="flex-1 p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {/* Employee Info Card */}
-                    <div className="bg-white shadow-lg rounded-lg p-6">
-                        <div className="flex items-center space-x-4 mb-4">
-                            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full text-white flex items-center justify-center text-xl font-bold">
-                                {employeeData.name[0]}
+                    <div className="p-6 bg-white rounded-lg shadow-lg">
+                        <div className="flex items-center mb-4 space-x-4">
+                            <div className="flex items-center justify-center w-16 h-16 text-xl font-bold text-white rounded-full bg-gradient-to-r from-blue-500 to-teal-500">
+                                {userData.name[0]}
                             </div>
                             <div>
-                                <h2 className="text-xl font-bold text-gray-800">{employeeData.name}</h2>
-                                <p className="text-sm text-gray-500">{employeeData.role}</p>
-                                <p className="text-sm text-gray-500">{employeeData.department}</p>
+                                <h2 className="text-xl font-bold text-gray-800">{userData.name}</h2>
+                                <p className="text-sm text-gray-500">{userData.role}</p>
+                                <p className="text-sm text-gray-500">{userData.department}</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Leave Data Card */}
-                    <div className="bg-white shadow-lg rounded-lg p-6">
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Leave Data for {monthName} {currentYear}</h3>
+                    <div className="p-6 bg-white rounded-lg shadow-lg">
+                        <h3 className="mb-4 text-xl font-semibold text-gray-800">Leave Data for {monthName} {currentYear}</h3>
                         <div className="space-y-3">
                             {currentMonthLeaves.map((leave, index) => (
                                 <div key={index} className="flex justify-between p-3 border rounded-md bg-gray-50">
@@ -117,13 +145,13 @@ const EmployeeDashboard = () => {
                     </div>
 
                     {/* Attendance Chart Card */}
-                    <div className="bg-white shadow-lg rounded-lg p-6">
+                    <div className="p-6 bg-white rounded-lg shadow-lg">
                         {/* Dropdown for Selecting Punching Type */}
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Attendance/Lunch Punching </h3>
-                        <div className=" mb-4 mt-10 w-full">
+                        <h3 className="mb-4 text-xl font-semibold text-gray-800">Attendance/Lunch Punching </h3>
+                        <div className="w-full mt-10 mb-4 ">
                             {/* Attendance Punching */}
                             <p
-                                className="cursor-pointer text-blue-500 hover:text-blue-700 font-medium"
+                                className="font-medium text-blue-500 cursor-pointer hover:text-blue-700"
                                 onClick={() => handleTypeClick('attendance')}
                             >
                                 Attendance Punching
@@ -131,7 +159,7 @@ const EmployeeDashboard = () => {
 
                             {/* Lunch Punching */}
                             <p
-                                className="cursor-pointer text-blue-500 hover:text-blue-700 font-medium mt-10"
+                                className="mt-10 font-medium text-blue-500 cursor-pointer hover:text-blue-700"
                                 onClick={() => handleTypeClick('lunch')}
                             >
                                 Lunch Punching
@@ -140,36 +168,36 @@ const EmployeeDashboard = () => {
 
                         {/* Modal */}
                         {isModalOpen && (
-                            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                                <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-                                    <h2 className="text-xl font-bold mb-4">
+                            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                                <div className="p-6 bg-white rounded-lg shadow-lg w-80">
+                                    <h2 className="mb-4 text-xl font-bold">
                                         {selectedType === 'attendance'
                                             ? 'Attendance Punching'
                                             : 'Lunch Punching'}
                                     </h2>
                                     {selectedType === 'attendance' && (
                                         <div className="flex flex-col space-y-4">
-                                            <button className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
+                                            <button className="py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
                                                 In Punching
                                             </button>
-                                            <button className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
+                                            <button className="py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
                                                 Out Punching
                                             </button>
                                         </div>
                                     )}
                                     {selectedType === 'lunch' && (
                                         <div className="flex flex-col space-y-4">
-                                            <button className="bg-green-500 text-white py-2 rounded-md hover:bg-green-600">
+                                            <button className="py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
                                                 Start Lunch Break
                                             </button>
-                                            <button className="bg-green-500 text-white py-2 rounded-md hover:bg-green-600">
+                                            <button className="py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
                                                 End Lunch Break
                                             </button>
                                         </div>
                                     )}
                                     <button
                                         onClick={closeModal}
-                                        className="mt-4 bg-red-500 text-white py-2 rounded-md hover:bg-red-600 w-full"
+                                        className="w-full py-2 mt-4 text-white bg-red-500 rounded-md hover:bg-red-600"
                                     >
                                         Close
                                     </button>
@@ -178,8 +206,8 @@ const EmployeeDashboard = () => {
                         )}
                     </div>
                 </div>
-                <div className="bg-white shadow-lg rounded-lg p-6 mt-10">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4">Attendance for {monthName} {currentYear}</h3>
+                <div className="p-6 mt-10 bg-white rounded-lg shadow-lg">
+                    <h3 className="mb-4 text-xl font-semibold text-gray-800">Attendance for {monthName} {currentYear}</h3>
                     <div className="h-80">
                         <Line data={attendanceData} options={{
                             responsive: true,

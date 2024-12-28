@@ -1,14 +1,4 @@
-// import React from 'react'
 
-// const Emp_LeaveManagment = () => {
-//   return (
-//     <div>
-      
-//     </div>
-//   )
-// }
-
-// export default Emp_LeaveManagment
 import axios from "axios";
 import CryptoJS from 'crypto-js';
 import React, { useEffect, useState } from "react";
@@ -22,12 +12,13 @@ const Emp_LeaveManagment = () => {
     console.log(selectedData, "selectedData")
     const [userData, setUserData] = useState(null);
     const [view, setView] = useState(false);
+    const SECRET_KEY = 'your-secret-key';
     console.log(userData)
     // Fetch and decrypt user data from sessionStorage
     useEffect(() => {
         const encryptedData = sessionStorage.getItem('userData');
         if (encryptedData) {
-            const decryptedData = CryptoJS.AES.decrypt(encryptedData, 'TechMET@183').toString(CryptoJS.enc.Utf8);
+            const decryptedData = CryptoJS.AES.decrypt(encryptedData, SECRET_KEY).toString(CryptoJS.enc.Utf8);
             const parsedData = JSON.parse(decryptedData);
             setUserData(parsedData); // Populate user data
         }
@@ -147,10 +138,10 @@ const Emp_LeaveManagment = () => {
                 </button>
             </div>
             <div className="flex flex-col items-center py-8">
-                <div className="w-full  bg-white rounded-lg shadow-md">
+                <div className="w-full bg-white rounded-lg shadow-md">
                     <table className="w-full border-collapse">
                         <thead>
-                            <tr className="bg-indigo-500 text-white">
+                            <tr className="text-white bg-indigo-500">
                                 <th className="px-4 py-2 text-left ">
                                     Employee Name
                                 </th>

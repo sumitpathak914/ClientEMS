@@ -1,20 +1,54 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios to make the API request
 import loginBg from '../../assets/loginbg.png';
+import CryptoJS from 'crypto-js'; // Import CryptoJS for encryption
+import { BaseUrl } from './Url';
 
 const Login = () => {
     const navigate = useNavigate(); // Hook to navigate programmatically
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const handleLogin = (e) => {
+    const SECRET_KEY = 'your-secret-key'; // Replace with your own secret key
+
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // For simplicity, navigate to the dashboard upon login
-        navigate('/dashboard');
+
+        try {
+            // Send login request to the API
+            const response = await axios.post(`${BaseUrl}/api/admin/login`, {
+                email,
+                password
+            });
+
+            // Check if the login is successful
+            if (response.data.statusCode === 200) {
+                // Encrypt the token and user data
+                const encryptedToken = CryptoJS.AES.encrypt(response.data.token, SECRET_KEY).toString();
+                const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response.data.data), SECRET_KEY).toString();
+
+                // Store encrypted token and user data in sessionStorage
+                sessionStorage.setItem('authToken', encryptedToken);
+                sessionStorage.setItem('userData', encryptedData);
+
+                // Navigate to the dashboard
+                navigate('/dashboard');
+                // window.location.reload()
+            } else {
+                setError('Invalid email or password');
+            }
+        } catch (error) {
+            setError('An error occurred while logging in');
+            console.error(error);
+        }
     };
 
     return (
         <div className="flex min-h-screen bg-gray-100 ">
             {/* Left Side - Image */}
-            <div className="hidden md:flex h-screen">
+            <div className="hidden h-screen md:flex">
                 <img
                     src={loginBg}
                     alt="Login Background"
@@ -23,41 +57,48 @@ const Login = () => {
             </div>
 
             {/* Right Side - Login Form */}
-            <div className="w-full md:w-1/2 flex items-center justify-center font-serif">
-                <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg animate-fadeIn">
-                    <h2 className="text-3xl font-semibold text-center mb-6 text-gray-800 font-serif">Login</h2>
+            <div className="flex items-center justify-center w-full font-serif md:w-1/2">
+                <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg animate-fadeIn">
+                    <h2 className="mb-6 font-serif text-3xl font-semibold text-center text-gray-800">Login</h2>
                     <form onSubmit={handleLogin}>
                         {/* Email Input */}
                         <div className="mb-4">
-                            <label className="block text-gray-600 mb-1">Email</label>
+                            <label className="block mb-1 text-gray-600">Email</label>
                             <input
                                 type="email"
                                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)} // Handle email input change
                             />
                         </div>
 
                         {/* Password Input */}
                         <div className="mb-6">
-                            <label className="block text-gray-600 mb-1">Password</label>
+                            <label className="block mb-1 text-gray-600">Password</label>
                             <input
                                 type="password"
                                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)} // Handle password input change
                             />
                         </div>
+
+                        {/* Error Message */}
+                        {error && <p className="mb-4 text-sm text-center text-red-500">{error}</p>}
 
                         {/* Login Button */}
                         <button
                             type="submit"
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-300"
+                            className="w-full px-4 py-2 text-white transition-colors duration-300 bg-blue-600 rounded-md hover:bg-blue-700"
                         >
                             Login
                         </button>
                     </form>
 
                     {/* Footer */}
-                    <p className="text-gray-500 text-sm text-center mt-4">
+                    <p className="mt-4 text-sm text-center text-gray-500">
                         Don't have an account?{' '}
                         <a href="#" className="text-blue-600 hover:underline">
                             Sign Up
