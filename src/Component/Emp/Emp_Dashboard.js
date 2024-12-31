@@ -247,14 +247,15 @@ const EmployeeDashboard = () => {
                                         <div className="flex flex-col space-y-4">
                                             <button
                                                 onClick={() => handlePunching('inPunch')}
-                                                disabled={attendance[0].inTime || loading}
+                                                disabled={attendance?.[0]?.inTime || loading}
                                                 className="py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 disabled:bg-blue-300"
                                             >
                                                 {loading ? 'Processing...' : 'In Punching'}
                                             </button>
+
                                             <button
                                                 onClick={() => handlePunching('outPunch')}
-                                                disabled={attendance[0].outTime || loading}
+                                                disabled={attendance?.[0]?.outTime || loading}
                                                 className="py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 disabled:bg-blue-300"
                                             >
                                                 {loading ? 'Processing...' : 'Out Punching'}
@@ -265,14 +266,14 @@ const EmployeeDashboard = () => {
                                         <div className="flex flex-col space-y-4">
                                             <button
                                                 onClick={() => handlePunching('startLunch')}
-                                                disabled={attendance[0].lunchStart || loading}
+                                                disabled={attendance?.[0]?.lunchStart || loading}
                                                 className="py-2 text-white bg-green-500 rounded-md hover:bg-green-600 disabled:bg-green-300"
                                             >
                                                 {loading ? 'Processing...' : 'Start Lunch Break'}
                                             </button>
                                             <button
                                                 onClick={() => handlePunching('endLunch')}
-                                                disabled={attendance[0].lunchEnd || loading}
+                                                disabled={attendance?.[0].lunchEnd || loading}
                                                 className="py-2 text-white bg-green-500 rounded-md hover:bg-green-600 disabled:bg-green-300"
                                             >
                                                 {loading ? 'Processing...' : 'End Lunch Break'}
