@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaTachometerAlt, FaUser, FaFileAlt, FaMoneyBillAlt, FaCalendarAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
+import { MdLeaderboard } from "react-icons/md";
 
 const SidebarComponent = ({ activeTab, onTabClick }) => {
     const navigate = useNavigate();
@@ -81,13 +82,7 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                 {userRole === 'Employee' && (
                     <>
                         {/* Work Report */}
-                        <Link
-                            to='/Work_Report'
-                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Work Report' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
-                        >
-                            <FaFileAlt />
-                            <span>Work Report</span>
-                        </Link>
+                       
 
                         {/* Attendance */}
                         <Link
@@ -97,7 +92,13 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                             <FaCalendarAlt />
                             <span>Attendance</span>
                         </Link>
-
+                        <Link
+                            to='/Work_Report'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Work Report' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                            <FaFileAlt />
+                            <span>Work Report</span>
+                        </Link>
                         {/* Leave Management */}
                         <Link
                             to='/Leave_Managment'
@@ -105,6 +106,21 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                         >
                             <FaUser />
                             <span>Leave Management</span>
+                        </Link>
+                        <Link
+                            to='/Leave_Managment'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Leave Management' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                            <FaUser />
+                            <span>Client Managment</span>
+                        </Link>
+
+                        <Link
+                            to='/Leave_Managment'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Leave Management' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                            <MdLeaderboard />
+                            <span>Leaderboard</span>
                         </Link>
                     </>
                 )}

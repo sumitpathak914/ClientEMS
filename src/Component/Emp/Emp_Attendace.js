@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
-import { FaRegEdit } from 'react-icons/fa'; // Import React Icon for edit
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';  // Import axios for API calls
+import { FaRegEdit, FaRegCopy, FaRegTrashAlt } from 'react-icons/fa'; // Import icons for edit, copy, delete
+import { BaseUrl } from '../Auth/Url';
 
 const Emp_Attendance = () => {
-    // Create 15 dummy attendance records with status
-    const [attendanceData, setAttendanceData] = useState([
-        { id: 1, date: '2024-12-01', punchIn: '09:00 AM', punchOut: '05:00 PM', status: 'Full Day' },
-        { id: 2, date: '2024-12-02', punchIn: '08:45 AM', punchOut: '04:50 PM', status: 'Full Day' },
-        { id: 3, date: '2024-12-03', punchIn: '09:10 AM', punchOut: '05:15 PM', status: 'Late' },
-        { id: 4, date: '2024-12-04', punchIn: '08:30 AM', punchOut: '05:30 PM', status: 'Full Day' },
-        { id: 5, date: '2024-12-05', punchIn: '09:05 AM', punchOut: '05:10 PM', status: 'Half Day' },
-        { id: 6, date: '2024-12-06', punchIn: '08:50 AM', punchOut: '04:45 PM', status: 'Full Day' },
-        { id: 7, date: '2024-12-07', punchIn: '09:20 AM', punchOut: '05:25 PM', status: 'Late' },
-        { id: 8, date: '2024-12-08', punchIn: '08:30 AM', punchOut: '05:15 PM', status: 'Full Day' },
-        { id: 9, date: '2024-12-09', punchIn: '09:00 AM', punchOut: '05:00 PM', status: 'Full Day' },
-        { id: 10, date: '2024-12-10', punchIn: '08:40 AM', punchOut: '04:40 PM', status: 'Half Day' },
-        { id: 11, date: '2024-12-11', punchIn: '09:05 AM', punchOut: '05:05 PM', status: 'Full Day' },
-        { id: 12, date: '2024-12-12', punchIn: '09:00 AM', punchOut: '05:00 PM', status: 'Late' },
-        { id: 13, date: '2024-12-13', punchIn: '08:50 AM', punchOut: '05:00 PM', status: 'Full Day' },
-        { id: 14, date: '2024-12-14', punchIn: '09:10 AM', punchOut: '05:10 PM', status: 'Half Day' },
-        { id: 15, date: '2024-12-15', punchIn: '08:55 AM', punchOut: '05:00 PM', status: 'Full Day' }
-    ]);
-
-    // Set initial page state
+    const [attendanceData, setAttendanceData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 10;
+
+    // Fetch attendance records from API
+    const fetchAttendanceData = async (page = 1, recordsPerPage = 10) => {
+        try {
+            const response = await axios.post(`${BaseUrl}/api/attendance/Get-AllpunchRecords`, {
+                empId: 1, // Replace with the actual empId
+                page,
+                recordsPerPage
+            });
+            setAttendanceData(response.data.attendance);
+        } catch (error) {
+            console.error('Error fetching attendance data:', error);
+        }
+    };
+
+    // Fetch data on component mount and when page changes
+    useEffect(() => {
+        fetchAttendanceData(currentPage, recordsPerPage);
+    }, [currentPage]);
 
     // Logic to paginate the data
     const indexOfLastRecord = currentPage * recordsPerPage;
@@ -37,42 +39,48 @@ const Emp_Attendance = () => {
     const totalPages = Math.ceil(attendanceData.length / recordsPerPage);
 
     return (
-        <div className="container mx-auto p-6 max-w-7xl">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-6 font-serif">Employee Attendance</h2>
-            <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-                <table className="min-w-full table-auto border-collapse border border-gray-300">
-                    <thead className="bg-indigo-600 text-white">
+        <div className="container p-6 mx-auto max-w-7xl">
+            <h2 className="mb-6 font-serif text-3xl font-semibold text-gray-800">Employee Attendance</h2>
+            <div className="overflow-x-auto bg-white rounded-lg shadow-md">
+                <table className="min-w-full border border-collapse border-gray-300 table-auto">
+                    <thead className="text-white bg-indigo-600">
                         <tr>
-                            <th className="border px-6 py-3 text-left">Date</th>
-                            <th className="border px-6 py-3 text-left">Punch In Time</th>
-                            <th className="border px-6 py-3 text-left">Punch Out Time</th>
-                            <th className="border px-6 py-3 text-left">Lunch Start Time</th>
-                            <th className="border px-6 py-3 text-left">Lunch End Time</th>
-                            <th className="border px-6 py-3 text-left">Status</th>
-                            
+                            <th className="px-6 py-3 text-left border">Date</th>
+                            <th className="px-6 py-3 text-left border">Punch In Time</th>
+                            <th className="px-6 py-3 text-left border">Punch Out Time</th>
+                            <th className="px-6 py-3 text-left border">Lunch Start Time</th>
+                            <th className="px-6 py-3 text-left border">Lunch End Time</th>
+                            <th className="px-6 py-3 text-left border">Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {currentRecords.map((record) => (
-                            <tr key={record.id} className="hover:bg-gray-50 transition duration-200">
-                                <td className="border px-6 py-4">{record.date}</td>
-                                <td className="border px-6 py-4">{record.punchIn}</td>
-                                <td className="border px-6 py-4">{record.punchOut}</td>
-                                <td className="border px-6 py-4">{record.punchOut}</td>
-                                <td className="border px-6 py-4">{record.punchOut}</td>
-                                
-                                <td className="border px-6 py-4">
-                                    <span
-                                        className={`px-2 py-1 text-xs rounded-full ${record.status === 'Full Day' ? 'bg-green-200 text-green-800' :
-                                            record.status === 'Late' ? 'bg-yellow-200 text-yellow-800' :
-                                                record.status === 'Half Day' ? 'bg-orange-200 text-orange-800' :
-                                                    'bg-red-200 text-red-800'}`}>
-                                        {record.status}
-                                    </span>
-                                </td>
-                               
-                            </tr>
-                        ))}
+                        {currentRecords.map((record) => {
+                            // Format date, inTime, outTime, lunchStart, and lunchEnd
+                            const formattedDate = new Date(record.date).toLocaleDateString();
+                            const formattedInTime = record.inTime ? new Date(record.inTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--';
+                            const formattedOutTime = record.outTime ? new Date(record.outTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--';
+                            const formattedLunchStart = record.lunchStart ? new Date(record.lunchStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--';
+                            const formattedLunchEnd = record.lunchEnd ? new Date(record.lunchEnd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--';
+
+                            return (
+                                <tr key={record.id} className="transition duration-200 hover:bg-gray-50">
+                                    <td className="px-6 py-4 border">{formattedDate}</td>
+                                    <td className="px-6 py-4 border">{formattedInTime}</td>
+                                    <td className="px-6 py-4 border">{formattedOutTime}</td>
+                                    <td className="px-6 py-4 border">{formattedLunchStart}</td>
+                                    <td className="px-6 py-4 border">{formattedLunchEnd}</td>
+                                    <td className="px-6 py-4 border">
+                                        <span
+                                            className={`px-2 py-1 text-xs rounded-full ${record.status === 'Full Day' ? 'bg-green-200 text-green-800' :
+                                                record.status === 'Late' ? 'bg-yellow-200 text-yellow-800' :
+                                                    record.status === 'Half Day' ? 'bg-orange-200 text-orange-800' :
+                                                        'bg-red-200 text-red-800'}`}>
+                                            {record.status || 'N/A'}
+                                        </span>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
@@ -82,7 +90,7 @@ const Emp_Attendance = () => {
                 <button
                     onClick={() => paginate(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 bg-indigo-500 text-white rounded-l hover:bg-indigo-600 disabled:opacity-50 transition duration-200">
+                    className="px-4 py-2 text-white transition duration-200 bg-indigo-500 rounded-l hover:bg-indigo-600 disabled:opacity-50">
                     Prev
                 </button>
                 {[...Array(totalPages).keys()].map((page) => (
@@ -96,7 +104,7 @@ const Emp_Attendance = () => {
                 <button
                     onClick={() => paginate(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 bg-indigo-500 text-white rounded-r hover:bg-indigo-600 disabled:opacity-50 transition duration-200">
+                    className="px-4 py-2 text-white transition duration-200 bg-indigo-500 rounded-r hover:bg-indigo-600 disabled:opacity-50">
                     Next
                 </button>
             </div>

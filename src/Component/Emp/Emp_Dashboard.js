@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import CryptoJS from 'crypto-js';
+import { BaseUrl } from '../Auth/Url';
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -14,10 +15,46 @@ const EmployeeDashboard = () => {
     const [selectedType, setSelectedType] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [userData, setUserData] = useState(null);
-    console.log(userData,"userdata")
+    console.log(userData, "userdata")
+    const [loading, setLoading] = useState(false);
     const [userRole, setUserRole] = useState(null); // Store the role
     const SECRET_KEY = 'your-secret-key'; // Same secret key used during login
+    const [attendance, setAttendance] = useState(null);
+    console.log(attendance,"attendancedata")
+    const [error, setError] = useState(null);
+    const today = new Date();
+    const date = today.toISOString().split('T')[0]; // 'YYYY-MM-DD'
 
+    useEffect(() => {
+       
+        if (userData) {
+            fetchAttendance();
+        }
+    }, [userData]); // Re-run if empId changes
+
+    const fetchAttendance = async () => {
+        try {
+            const empId = userData.id; // Ensure this is valid
+            const response = await fetch(`${BaseUrl}/api/attendance/Get-punchRecords`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ empId, date }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Error fetching attendance record');
+            }
+
+            const data = await response.json();
+            setAttendance(data.attendance); // Store attendance data
+            setError(null); // Clear any previous errors
+        } catch (err) {
+            setError(err.message); // Set error if request fails
+            console.error(err);
+        }
+    };
     useEffect(() => {
         const encryptedToken = sessionStorage.getItem('authToken');
         const encryptedUserData = sessionStorage.getItem('userData');
@@ -102,6 +139,37 @@ const EmployeeDashboard = () => {
         setSelectedType(type);
         setIsModalOpen(true);
     };
+
+    const handlePunching = async (action) => {
+        setLoading(true);
+        try {
+            const empId = userData.id; // Replace this with dynamic empId if available
+
+            const response = await fetch(`${BaseUrl}/api/attendance/punch`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ empId, action }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to process the request.');
+            }
+
+            const data = await response.json();
+            alert(data.message);
+            fetchAttendance()
+        } catch (error) {
+            console.error('Error:', error);
+            alert(error.message || 'An error occurred while processing the request.');
+        } finally {
+            setLoading(false);
+        }
+    };
+   
+   
     if (!userData) {
         return <div>Loading...</div>; // Or a placeholder message
     }
@@ -177,21 +245,37 @@ const EmployeeDashboard = () => {
                                     </h2>
                                     {selectedType === 'attendance' && (
                                         <div className="flex flex-col space-y-4">
-                                            <button className="py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-                                                In Punching
+                                            <button
+                                                onClick={() => handlePunching('inPunch')}
+                                                disabled={attendance[0].inTime || loading}
+                                                className="py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 disabled:bg-blue-300"
+                                            >
+                                                {loading ? 'Processing...' : 'In Punching'}
                                             </button>
-                                            <button className="py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-                                                Out Punching
+                                            <button
+                                                onClick={() => handlePunching('outPunch')}
+                                                disabled={attendance[0].outTime || loading}
+                                                className="py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 disabled:bg-blue-300"
+                                            >
+                                                {loading ? 'Processing...' : 'Out Punching'}
                                             </button>
                                         </div>
                                     )}
                                     {selectedType === 'lunch' && (
                                         <div className="flex flex-col space-y-4">
-                                            <button className="py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
-                                                Start Lunch Break
+                                            <button
+                                                onClick={() => handlePunching('startLunch')}
+                                                disabled={attendance[0].lunchStart || loading}
+                                                className="py-2 text-white bg-green-500 rounded-md hover:bg-green-600 disabled:bg-green-300"
+                                            >
+                                                {loading ? 'Processing...' : 'Start Lunch Break'}
                                             </button>
-                                            <button className="py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
-                                                End Lunch Break
+                                            <button
+                                                onClick={() => handlePunching('endLunch')}
+                                                disabled={attendance[0].lunchEnd || loading}
+                                                className="py-2 text-white bg-green-500 rounded-md hover:bg-green-600 disabled:bg-green-300"
+                                            >
+                                                {loading ? 'Processing...' : 'End Lunch Break'}
                                             </button>
                                         </div>
                                     )}
