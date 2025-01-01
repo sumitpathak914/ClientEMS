@@ -8,4 +8,4 @@ const Emp_Document = () => {
   )
 }
 
-export default Emp_Document
+export default Emp_Document;

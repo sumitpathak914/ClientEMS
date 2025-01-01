@@ -68,6 +68,33 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                             <span>Hr_Attendance</span>
                         </Link>
 
+                        {/* Hr_Work report*/}
+                        <Link
+                            to='/'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                             <FaFileAlt />
+                            <span>Work Report </span>
+                        </Link>
+
+                        {/* Hr_leave Mangement */}
+                        <Link
+                            to='/'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                            <FaUser />
+                            <span>Leave Mangement</span>
+                        </Link>
+
+                        {/* Hr_Leaderbord */}
+                        <Link
+                            to='/'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                           <MdLeaderboard />
+                            <span>Leaderboard</span>
+                        </Link>
+
                         {/* Salary Management */}
                         <Link
                             to='/salary_Managment'
@@ -109,7 +136,7 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                         </Link>
                         <Link
                             to='/Emp_ClientManagment'
-                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Leave Management' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'ClientManagment' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                         >
                             <FaUser />
                             <span>Client Managment</span>
@@ -117,7 +144,7 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
 
                         <Link
                             to='/Emp_Leaderbord'
-                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Leave Management' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Leaderbord' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                         >
                             <MdLeaderboard />
                             <span>Leaderboard</span>
