@@ -23,61 +23,61 @@ function Emp_ClientManagement() {
   };
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
-      <h2 className="text-2xl font-bold mb-4">Client Management</h2>
-      <div className="flex items-center mb-4">
+    <div className="p-6 bg-gray-50 min-h-screen font-sans">
+      <h2 className="text-3xl font-semibold text-gray-800 mb-6">Client Management</h2>
+      <div className="flex items-center mb-6">
         {/* Search Bar */}
         <input
           type="text"
           placeholder="Search by Client ID"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md flex-grow mr-4"
+          className="p-3 border border-gray-300 rounded-lg flex-grow mr-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
         {/* Add Client Button */}
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="bg-teal-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-teal-700 transition duration-200"
         >
           Add Client
         </button>
       </div>
 
       {/* Client List */}
-      <table className="w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-gray-200">
+      <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <thead className="bg-gray-100">
           <tr>
-            <th className="p-2 text-left">Client ID</th>
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Mobile Number</th>
-            <th className="p-2 text-left">Account Balance</th>
-            <th className="p-2 text-left">Actions</th>
+            <th className="p-4 text-left text-gray-600">Client ID</th>
+            <th className="p-4 text-left text-gray-600">Name</th>
+            <th className="p-4 text-left text-gray-600">Mobile Number</th>
+            <th className="p-4 text-left text-gray-600">Account Balance</th>
+            <th className="p-4 text-left text-gray-600">Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredClients.length > 0 ? (
             filteredClients.map((client) => (
-              <tr key={client.id} className="border-b">
-                <td className="p-2">{client.id}</td>
-                <td className="p-2">{client.name}</td>
-                <td className="p-2">{client.mobile}</td>
-                <td className="p-2">{client.wallet}</td>
-                <td className="p-2">
-                  <button className="bg-blue-500 text-white px-2 py-1 rounded-md mr-2">
+              <tr key={client.id} className="border-b hover:bg-gray-50">
+                <td className="p-4 text-gray-800">{client.id}</td>
+                <td className="p-4 text-gray-800">{client.name}</td>
+                <td className="p-4 text-gray-800">{client.mobile}</td>
+                <td className="p-4 text-gray-800">{client.wallet}</td>
+                <td className="p-4">
+                  <button className="bg-teal-500 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-teal-600 transition duration-200 mr-2">
                     View History
                   </button>
-                  <button className="bg-green-500 text-white px-2 py-1 rounded-md">
-                  Investment
+                  <button className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-green-600 transition duration-200 mr-2">
+                    Investment
                   </button>
-                  <button className="bg-red-500 text-white px-2 py-1 rounded-md ml-2">
-                   Withdrawal
+                  <button className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-red-600 transition duration-200">
+                    Withdrawal
                   </button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="p-4 text-center">
+              <td colSpan="5" className="p-4 text-center text-gray-500">
                 No clients found.
               </td>
             </tr>
@@ -88,46 +88,46 @@ function Emp_ClientManagement() {
       {/* Add Client Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg p-6 w-96">
-            <h3 className="text-xl font-bold mb-4">Add New Client</h3>
+          <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
+            <h3 className="text-xl font-semibold text-gray-800 mb-6">Add New Client</h3>
             <input
               type="text"
               placeholder="Client ID"
               value={newClient.id}
               onChange={(e) => setNewClient({ ...newClient, id: e.target.value })}
-              className="w-full p-2 border border-gray-300 rounded-md mb-2"
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <input
               type="text"
               placeholder="Name"
               value={newClient.name}
               onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-              className="w-full p-2 border border-gray-300 rounded-md mb-2"
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <input
               type="text"
               placeholder="Mobile Number"
               value={newClient.mobile}
               onChange={(e) => setNewClient({ ...newClient, mobile: e.target.value })}
-              className="w-full p-2 border border-gray-300 rounded-md mb-2"
+              className="w-full p-3 border border-gray-300 rounded-lg mb-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <input
               type="text"
               placeholder="Account Balance"
               value={newClient.wallet}
               onChange={(e) => setNewClient({ ...newClient, wallet: e.target.value })}
-              className="w-full p-2 border border-gray-300 rounded-md mb-4"
+              className="w-full p-3 border border-gray-300 rounded-lg mb-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
             />
             <div className="flex justify-end">
               <button
                 onClick={() => setShowModal(false)}
-                className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2"
+                className="bg-gray-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-gray-600 mr-4 transition duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAddClient}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="bg-teal-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-teal-700 transition duration-200"
               >
                 Add Client
               </button>
