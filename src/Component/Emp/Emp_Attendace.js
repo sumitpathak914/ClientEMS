@@ -50,7 +50,7 @@ const Emp_Attendance = () => {
     // Fetch data on component mount and when page changes
     useEffect(() => {
         fetchAttendanceData(currentPage, recordsPerPage);
-    }, [currentPage]);
+    }, [currentPage, userData]);
 
     // Logic to paginate the data
     const indexOfLastRecord = currentPage * recordsPerPage;
