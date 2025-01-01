@@ -108,7 +108,7 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                             <span>Leave Management</span>
                         </Link>
                         <Link
-                            to='/Leave_Managment'
+                            to='/Emp_ClientManagment'
                             className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Leave Management' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                         >
                             <FaUser />
@@ -116,7 +116,7 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                         </Link>
 
                         <Link
-                            to='/Leave_Managment'
+                            to='/Emp_Leaderbord'
                             className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Leave Management' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                         >
                             <MdLeaderboard />

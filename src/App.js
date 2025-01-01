@@ -16,6 +16,8 @@ import EmployeeDashboard from './Component/Emp/Emp_Dashboard';
 import SidebarComponent from './Component/Auth/sidebar';
 import ProtectedRoute from './Component/Auth/protectedRoute';
 import Layout from './Component/Auth/Layout';
+import Emp_ClientManagment from './Component/Emp/Emp_ClientManagment';
+import Emp_Leaderbord from './Component/Emp/Emp_Leaderbord';
 
 function App() {
   const [token, setToken] = useState(null);
@@ -58,6 +60,16 @@ function App() {
           <Route path="/salary_Managment" element={<ProtectedRoute>
             <Emp_salary />
                     </ProtectedRoute>} />
+
+                    <Route path="/Emp_ClientManagment" element={<ProtectedRoute>
+            < Emp_ClientManagment/>
+                    </ProtectedRoute>} />
+
+                    <Route path="Emp_Leaderbord/" element={<ProtectedRoute>
+            <Emp_Leaderbord/>
+                    </ProtectedRoute>} />
+
+
 
           {/* HR Routes */}
           <Route path="/Employee_Attendance" element={<Hr_Attendance_EMP_List />} />
