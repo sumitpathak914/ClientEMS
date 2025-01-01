@@ -2,17 +2,42 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';  // Import axios for API calls
 import { FaRegEdit, FaRegCopy, FaRegTrashAlt } from 'react-icons/fa'; // Import icons for edit, copy, delete
 import { BaseUrl } from '../Auth/Url';
-
+import CryptoJS from 'crypto-js';
 const Emp_Attendance = () => {
     const [attendanceData, setAttendanceData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 10;
+  const [userData, setUserData] = useState(null);
+    console.log(userData, "userdata")
+    const SECRET_KEY = 'your-secret-key'; 
+   
 
+     useEffect(() => {
+            const encryptedToken = sessionStorage.getItem('authToken');
+            const encryptedUserData = sessionStorage.getItem('userData');
+            console.log("Encrypted Token:", encryptedToken);  // Check if token is in sessionStorage
+            console.log("Encrypted UserData:", encryptedUserData);  // Check if userData is in sessionStorage
+    
+            if (encryptedToken && encryptedUserData) {
+                try {
+                    const bytes = CryptoJS.AES.decrypt(encryptedUserData, SECRET_KEY);
+                    const decryptedUserData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    
+                    setUserData(decryptedUserData);
+                    
+                } catch (error) {
+                    console.error("Decryption failed:", error); // Log if decryption fails
+                }
+            } else {
+                console.log("No user data or token found in sessionStorage");
+            }
+        }, []);
+    
     // Fetch attendance records from API
     const fetchAttendanceData = async (page = 1, recordsPerPage = 10) => {
         try {
             const response = await axios.post(`${BaseUrl}/api/attendance/Get-AllpunchRecords`, {
-                empId: 1, // Replace with the actual empId
+                empId: userData.id, // Replace with the actual empId
                 page,
                 recordsPerPage
             });

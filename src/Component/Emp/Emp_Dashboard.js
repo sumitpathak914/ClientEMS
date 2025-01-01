@@ -30,7 +30,7 @@ const EmployeeDashboard = () => {
         if (userData) {
             fetchAttendance();
         }
-    }, [userData]); // Re-run if empId changes
+    }, [userData]);
 
     const fetchAttendance = async () => {
         try {
