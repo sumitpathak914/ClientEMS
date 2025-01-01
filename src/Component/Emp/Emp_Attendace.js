@@ -64,7 +64,7 @@ const Emp_Attendance = () => {
     const totalPages = Math.ceil(attendanceData.length / recordsPerPage);
 
     return (
-        <div className="container p-6 mx-auto max-w-7xl">
+        <div className="container  mx-auto max-w-7xl">
             <h2 className="mb-6 font-serif text-3xl font-semibold text-gray-800">Employee Attendance</h2>
             <div className="overflow-x-auto bg-white rounded-lg shadow-md">
                 <table className="min-w-full border border-collapse border-gray-300 table-auto">
