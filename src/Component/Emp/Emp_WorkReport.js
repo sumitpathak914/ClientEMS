@@ -1,203 +1,171 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import CryptoJS from 'crypto-js';
-import { FaRegEye } from 'react-icons/fa';
-import { BaseUrl } from '../Auth/Url';
-
-import { useParams } from 'react-router-dom';
+import React, { useState } from "react";
 
 const Emp_WorkReport = () => {
-  const { emp_id } = useParams();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpenView, setIsModalOpenView] = useState(false);
-  const [reportContent, setReportContent] = useState('');
-  const [workReports, setWorkReports] = useState([]);
-  const [filteredReports, setFilteredReports] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [selectedReport, setSelectedReport] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [reportsPerPage] = useState(10);
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const SECRET_KEY = 'your-secret-key';
-  useEffect(() => {
-         const encryptedToken = sessionStorage.getItem('authToken');
-         const encryptedUserData = sessionStorage.getItem('userData');
-         console.log("Encrypted Token:", encryptedToken);  // Check if token is in sessionStorage
-         console.log("Encrypted UserData:", encryptedUserData);  // Check if userData is in sessionStorage
- 
-         if (encryptedToken && encryptedUserData) {
-             try {
-                 const bytes = CryptoJS.AES.decrypt(encryptedUserData, SECRET_KEY);
-                 const decryptedUserData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
- 
-                 setUserData(decryptedUserData);
-                 
-             } catch (error) {
-                 console.error("Decryption failed:", error); // Log if decryption fails
-             }
-         } else {
-             console.log("No user data or token found in sessionStorage");
-         }
-     }, []);
-
-  useEffect(() => {
-    if (userData?.empID || emp_id) {
-      fetchWorkReports();
-    }
-  }, [userData]);
-
-  const fetchWorkReports = async () => {
-    try {
-      const response = await axios.post(`${BaseUrl}/api/work-reports/getReports`, {
-        emp_id: userData?.id
-      });
-      setWorkReports(response.data.data.reverse());
-      setFilteredReports(response.data.data);
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching work reports:', err);
-      setError('Failed to fetch work reports');
-      setLoading(false);
-    }
-  };
+  const [reports, setReports] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [newReport, setNewReport] = useState({
+    date: "",
+    task: "",
+    manager: "",
+  });
 
   const handleFilter = () => {
-    if (fromDate && toDate) {
-      const filtered = workReports.filter((report) => {
-        const reportDate = new Date(report.todayDate);
-        return reportDate >= new Date(fromDate) && reportDate <= new Date(toDate);
-      }); 
-      setFilteredReports(filtered);
-      setCurrentPage(1);
-    }
+    // Add filter logic here
+    console.log("Filter applied");
   };
 
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
-
-  const toggleModalViewOpenClose = () => setIsModalOpenView(!isModalOpenView);
-
-  const handleViewReport = (report) => {
-    setSelectedReport(report);
-    setIsModalOpenView(true);
+  const handleClear = () => {
+    // Clear filter logic
+    console.log("Filters cleared");
   };
 
-  const handleSaveReport = () => {
-    console.log('Report Content:', reportContent);
-    setIsModalOpen(false);
-  };
-
-  const indexOfLastReport = currentPage * reportsPerPage;
-  const indexOfFirstReport = indexOfLastReport - reportsPerPage;
-  const currentReports = filteredReports.slice(indexOfFirstReport, indexOfLastReport);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const handleClearFilter = () => {
-    setFromDate('');
-    setToDate('');
-    fetchWorkReports();
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setReports([...reports, newReport]);
+    setNewReport({ date: "", task: "", manager: "" });
+    setShowForm(false);
   };
 
   return (
-    <div className="p-6 mt-5">
-      <div className="p-6 mx-auto bg-white rounded-lg shadow-md">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-semibold text-gray-800">Employee Management - Work Report</h1>
-          {userData?.role !== 'hr' && (
-            <button
-              className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
-              onClick={toggleModal}
-            >
-              Add New Report
-            </button>
-          )}
-        </div>
+    <div className="p-6 bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen">
+      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-8">
+        <h1 className="text-2xl font-bold text-gray-700 mb-6">
+          Employee Management - Work Report
+        </h1>
 
-        <div className="flex mb-4 space-x-4">
+        {/* Filters and Actions */}
+        <div className="flex flex-wrap gap-4 items-center mb-6">
           <input
             type="date"
-            className="p-2 border rounded-md"
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Start Date"
           />
           <input
             type="date"
-            className="p-2 border rounded-md"
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="End Date"
           />
           <button
-            className="px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700"
             onClick={handleFilter}
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-blue-600 transition"
           >
-            Filter
+            Apply Filter
           </button>
           <button
-            className="px-4 py-2 text-white bg-gray-600 rounded-md hover:bg-gray-700"
-            onClick={handleClearFilter}
+            onClick={handleClear}
+            className="bg-gray-400 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-gray-500 transition"
           >
             Clear
           </button>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-green-500 text-white font-semibold px-6 py-2 rounded-lg shadow-md hover:bg-green-600 transition"
+          >
+            Add New Report
+          </button>
         </div>
 
-        {currentReports.length === 0 ? (
-          <p>No reports found for this employee.</p>
-        ) : (
-          <table className="w-full text-sm text-left text-gray-600">
-            <thead className="bg-gray-200">
-              <tr className="text-center">
-                <th className="p-3 font-medium">Date</th>
-                <th className="p-3 font-medium">Project</th>
-                <th className="p-3 font-medium">Module</th>
-                <th className="p-3 font-medium">Hours Worked</th>
-                <th className="p-3 font-medium">Status</th>
-                <th className="p-3 font-medium">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentReports.map((report, index) => (
-                <tr key={index} className="text-center border-t">
-                  <td className="p-3">{new Date(report.todayDate).toLocaleDateString()}</td>
-                  <td className="p-3">{report.details.map((detail) => detail.projectName).join(', ')}</td>
-                  <td className="p-3">{report.details.map((detail) => detail.moduleName).join(', ')}</td>
-                  <td className="p-3">{report.details.map((detail) => detail.workingHr).join(', ')}</td>
-                  <td className="p-3 text-green-600">{report.details.map((detail) => detail.status).join(', ')}</td>
-                  <td
-                    className="flex justify-center p-3 cursor-pointer"
-                    onClick={() => handleViewReport(report)}
-                  >
-                    <FaRegEye />
-                  </td>
+        {/* Reports Table */}
+        {reports.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+              <thead>
+                <tr className="bg-blue-100 text-gray-700 uppercase text-sm font-semibold">
+                  <th className="px-6 py-4 border ">Date</th>
+                  <th className="px-6 py-4 border ">Task</th>
+                  <th className="px-6 py-4 border ">Reporting Manager</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {reports.map((report, index) => (
+                  <tr
+                    key={index}
+                    className={`${
+                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } hover:bg-blue-50`}
+                  >
+                    <td className="px-6 py-4 border text-center">{report.date}</td>
+                    <td className="px-6 py-4 border text-center">{report.task}</td>
+                    <td className="px-6 py-4 border text-center">{report.manager}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-gray-500 text-center">No reports found.</p>
         )}
 
-        <div className="flex justify-center mt-4">
-          {Array.from({ length: Math.ceil(filteredReports.length / reportsPerPage) }, (_, i) => (
-            <button
-              key={i}
-              className={`px-3 py-1 border rounded-md mx-1 ${
-                currentPage === i + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'
-              }`}
-              onClick={() => paginate(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
+        {/* Add Report Form Modal */}
+        {showForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
+            <div className="bg-white p-8 rounded-xl shadow-lg max-w-lg w-full">
+              <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                Add Work Report
+              </h2>
+              <form onSubmit={handleFormSubmit}>
+                <div className="mb-4">
+                  <label className="block text-gray-600 font-medium mb-2">
+                    Date
+                  </label>
+                  <input
+                    type="date"
+                    className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={newReport.date}
+                    onChange={(e) =>
+                      setNewReport({ ...newReport, date: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-600 font-medium mb-2">
+                    Task
+                  </label>
+                  <input
+                    type="text"
+                    className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={newReport.task}
+                    onChange={(e) =>
+                      setNewReport({ ...newReport, task: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-600 font-medium mb-2">
+                    Reporting Manager
+                  </label>
+                  <input
+                    type="text"
+                    className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={newReport.manager}
+                    onChange={(e) =>
+                      setNewReport({ ...newReport, manager: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="flex justify-end gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    className="bg-gray-400 text-white px-6 py-2 rounded-lg shadow-md hover:bg-gray-500 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600 transition"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* <ReportModal isModalOpen={isModalOpen} toggleModal={toggleModal} handleSaveReport={handleSaveReport} />
-      <ReportModalDisplay
-        isModalOpen={isModalOpenView}
-        toggleModal={toggleModalViewOpenClose}
-        report={selectedReport}
-      /> */}
     </div>
   );
 };
