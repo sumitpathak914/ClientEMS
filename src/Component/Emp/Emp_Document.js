@@ -1,83 +1,54 @@
-import React, { useState, useEffect } from 'react';
-
-// Example function to simulate fetching data from an API
-const fetchDocuments = async () => {
-  return [
-    { id: 1, type: 'Salary Slip', month: 'January', year: '2025', url: 'path/to/salary-january.pdf' },
-    { id: 2, type: 'Salary Slip', month: 'February', year: '2025', url: 'path/to/salary-february.pdf' },
-    { id: 3, type: 'Contract', month: '', year: '', url: 'path/to/contract.pdf' },
-    { id: 4, type: 'Leave Request', month: '', year: '', url: 'path/to/leave-request.pdf' },
-    { id: 5, type: 'Tax Form', month: '', year: '', url: 'path/to/tax-form.pdf' },
-    // Add other document types here
-  ];
-};
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Emp_Document = () => {
-  const [documents, setDocuments] = useState([]);
-  const [selectedType, setSelectedType] = useState('All');
+  const navigate = useNavigate();
 
-  // Fetch all documents on component mount
-  useEffect(() => {
-    const loadDocuments = async () => {
-      const allDocuments = await fetchDocuments();
-      setDocuments(allDocuments);
-    };
+  const employees = [
+    { id: 1, name: 'John Doe', role: 'Developer', position: 'Frontend' },
+    { id: 2, name: 'Jane Smith', role: 'Designer', position: 'UI/UX' },
+    { id: 3, name: 'Bob Brown', role: 'Manager', position: 'HR' },
+  ];
 
-    loadDocuments();
-  }, []);
-
-  // Filter documents by type
-  const filterDocuments = (type) => {
-    if (type === 'All') return documents;
-    return documents.filter(doc => doc.type === type);
+  const handleAddDocument = (id) => {
+    navigate(`/add-document/${id}`);
   };
 
   return (
-    <div>
-      <h2>Employee Documents</h2>
-
-      {/* Dropdown for selecting document type */}
-      <select
-        onChange={(e) => setSelectedType(e.target.value)}
-        value={selectedType}
-        className="mb-4 p-2 border rounded"
-      >
-        <option value="All">All Documents</option>
-        <option value="Salary Slip">Salary Slip</option>
-        <option value="Contract">Contract</option>
-        <option value="Leave Request">Leave Request</option>
-        <option value="Tax Form">Tax Form</option>
-        {/* Add more document types here */}
-      </select>
-
-      {/* Display filtered documents */}
-      <div className="documents-list">
-        {filterDocuments(selectedType).length > 0 ? (
-          filterDocuments(selectedType).map(doc => (
-            <div key={doc.id} className="document-item mb-4">
-              <h3>{doc.type} {doc.month && doc.year && `- ${doc.month} ${doc.year}`}</h3>
-              <div>
-                {/* View Document Link */}
-                <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 mr-4">
-                  View Document
-                </a>
-                {/* Download Document Link */}
-                <a
-                  href={doc.url}
-                  download
-                  className="text-blue-500"
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Employee Documents</h1>
+      <table className="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="border border-gray-300 p-2">Emp ID</th>
+            <th className="border border-gray-300 p-2">Name</th>
+            <th className="border border-gray-300 p-2">Role</th>
+            <th className="border border-gray-300 p-2">Position</th>
+            <th className="border border-gray-300 p-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {employees.map((employee) => (
+            <tr key={employee.id} className="hover:bg-gray-100">
+              <td className="border border-gray-300 p-2 text-center">{employee.id}</td>
+              <td className="border border-gray-300 p-2">{employee.name}</td>
+              <td className="border border-gray-300 p-2">{employee.role}</td>
+              <td className="border border-gray-300 p-2">{employee.position}</td>
+              <td className="border border-gray-300 p-2 text-center">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  onClick={() => handleAddDocument(employee.id)}
                 >
-                  Download PDF
-                </a>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No documents available for this type.</p>
-        )}
-      </div>
+                  Document Section
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
+
 
 export default Emp_Document;
