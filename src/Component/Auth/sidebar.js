@@ -95,9 +95,9 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                             <span>Leaderboard</span>
                         </Link>
 
-                        {/* Salary Management */}
+                        {/* HR Salary Management */}
                         <Link
-                            to='/salary_Managment'
+                            to='/Hr_salaryVEmp'
                             className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Salary Management' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                         >
                             <FaMoneyBillAlt />
@@ -152,9 +152,61 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
                     </>
                 )}
 
+            {userRole === 'admin' && (
+<>
+
+                       <Link
+                            to='/Employee_Attendance'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                            <FaCalendarAlt />
+                            <span>Admin_Attendance</span>
+                        </Link>
+
+                        {/* Hr_Work report*/}
+                        <Link
+                            to='/Hr_EmpWlist'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                             <FaFileAlt />
+                            <span>Work Report </span>
+                        </Link>
+
+                        {/* Hr_leave Mangement */}
+                        <Link
+                            to='/Hr_LeaveManagement'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                            <FaUser />
+                            <span>Leave Mangement</span>
+                        </Link>
+
+                        {/* Hr_Leaderbord */}
+                        <Link
+                            to='/LeaderBord'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                           <MdLeaderboard />
+                            <span>Leaderboard</span>
+                        </Link>
+
+                        {/* HR Salary Management */}
+                        <Link
+                            to='/Hr_salaryVEmp'
+                            className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Salary Management' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
+                        >
+                            <FaMoneyBillAlt />
+                            <span>Salary Management</span>
+                        </Link>
+                    </>
+                )}
+
+
+
+
                 {/* Common Links for both HR and Employee */}
                 <Link
-                    to='/Document'
+                    to='/HR_EMPDocument'
                     className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Document' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                 >
                     <FaFileAlt />

@@ -23,6 +23,8 @@ import Hr_EmpWlist from './Component/Hr/Hr_Empworkview/Hr_EmpWlist';
 import LeaderBord from './Component/Hr/Hr_LeaderBord/LeaderBord';
 import Hr_LeaveManagement from './Component/Hr/Hr_LeaveforEMPsection/Hr_LeaveManagement';
 import Hr_viewApplication from './Component/Hr/Hr_LeaveforEMPsection/Hr_viewApplication';
+import Hr_salaryVEmp from './Component/Hr/Hr_SalaryMangement/Hr_salaryVEmp';
+import Hr_Empwork from './Component/Hr/Hr_Empworkview/Hr_Empwork';
 
 function App() {
   const [token, setToken] = useState(null);
@@ -84,6 +86,9 @@ function App() {
           <Route path="/LeaderBord" element={<LeaderBord/>} />
           <Route path="/Hr_LeaveManagement" element={<Hr_LeaveManagement/>} />
           <Route path="/employee/:empId" element={< Hr_viewApplication />} />
+          <Route path="/Hr_salaryVEmp" element={< Hr_salaryVEmp/>} />
+          <Route path="/work-report/:id" element={<Hr_Empwork />} />
+
         </Routes>
       </div>
     </div>

@@ -10,8 +10,8 @@ const Hr_EmpWlist = () => {
     { id: 3, name: 'Bob Brown', role: 'Manager', position: 'HR' },
   ];
 
-  const handleAddDocument = (id) => {
-    navigate(`/add-document/${id}`);
+  const handleViewWorkReport = (id) => {
+    navigate(`/work-report/${id}`);
   };
 
   return (
@@ -37,9 +37,9 @@ const Hr_EmpWlist = () => {
               <td className="border border-gray-300 p-2 text-center">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                  onClick={() => handleAddDocument(employee.id)}
+                  onClick={() => handleViewWorkReport(employee.id)}
                 >
-                  Work Report 
+                  Work Report
                 </button>
               </td>
             </tr>
@@ -49,8 +49,6 @@ const Hr_EmpWlist = () => {
     </div>
   );
 };
-
-
 
 
 

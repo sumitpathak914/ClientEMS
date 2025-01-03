@@ -183,13 +183,13 @@ const EmployeeDashboard = () => {
                     {/* Employee Info Card */}
                     <div className="p-6 bg-white rounded-lg shadow-lg">
                         <div className="flex items-center mb-4 space-x-4">
-                            <div className="flex items-center justify-center w-16 h-16 text-xl font-bold text-white rounded-full bg-gradient-to-r from-blue-500 to-teal-500">
-                                {userData.name[0]}
-                            </div>
+                            {/* <div className="flex items-center justify-center w-16 h-16 text-xl font-bold text-white rounded-full bg-gradient-to-r from-blue-500 to-teal-500">
+                                {userData?.name[0]}
+                            </div> */}
                             <div>
-                                <h2 className="text-xl font-bold text-gray-800">{userData.name}</h2>
-                                <p className="text-sm text-gray-500">{userData.role}</p>
-                                <p className="text-sm text-gray-500">{userData.department}</p>
+                                <h2 className="text-xl font-bold text-gray-800">{userData?.name}</h2>
+                                <p className="text-sm text-gray-500">{userData?.role}</p>
+                                <p className="text-sm text-gray-500">{userData?.department}</p>
                             </div>
                         </div>
                     </div>
