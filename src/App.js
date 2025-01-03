@@ -19,6 +19,10 @@ import Layout from './Component/Auth/Layout';
 import Emp_ClientManagment from './Component/Emp/Emp_ClientManagment';
 import Emp_Leaderbord from './Component/Emp/Emp_Leaderbord';
 import HR_EMPDocument from './Component/Hr/HR_EMPDocumentSection/HR_EMPDocument';
+import Hr_EmpWlist from './Component/Hr/Hr_Empworkview/Hr_EmpWlist';
+import LeaderBord from './Component/Hr/Hr_LeaderBord/LeaderBord';
+import Hr_LeaveManagement from './Component/Hr/Hr_LeaveforEMPsection/Hr_LeaveManagement';
+import Hr_viewApplication from './Component/Hr/Hr_LeaveforEMPsection/Hr_viewApplication';
 
 function App() {
   const [token, setToken] = useState(null);
@@ -76,7 +80,10 @@ function App() {
           <Route path="/Employee_Attendance" element={<Hr_Attendance_EMP_List />} />
           <Route path="/Employee_Details" element={<Hr_AddEMP />} />
           <Route path="/HR_EMPDocument" element={<HR_EMPDocument />} />
-          
+          <Route path="/Hr_EmpWlist" element={<Hr_EmpWlist />} />
+          <Route path="/LeaderBord" element={<LeaderBord/>} />
+          <Route path="/Hr_LeaveManagement" element={<Hr_LeaveManagement/>} />
+          <Route path="/employee/:empId" element={< Hr_viewApplication />} />
         </Routes>
       </div>
     </div>

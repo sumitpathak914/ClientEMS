@@ -70,7 +70,7 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
 
                         {/* Hr_Work report*/}
                         <Link
-                            to='/'
+                            to='/Hr_EmpWlist'
                             className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                         >
                              <FaFileAlt />
@@ -79,7 +79,7 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
 
                         {/* Hr_leave Mangement */}
                         <Link
-                            to='/'
+                            to='/Hr_LeaveManagement'
                             className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                         >
                             <FaUser />
@@ -88,7 +88,7 @@ const SidebarComponent = ({ activeTab, onTabClick }) => {
 
                         {/* Hr_Leaderbord */}
                         <Link
-                            to='/'
+                            to='/LeaderBord'
                             className={`flex items-center space-x-4 cursor-pointer p-3 rounded-md ${activeTab === 'Hr_Attendance' ? 'bg-blue-700' : 'hover:bg-blue-600'}`}
                         >
                            <MdLeaderboard />
