@@ -1,5 +1,5 @@
- const BaseUrl = "https://ems.pertrade.co.in";
-// const BaseUrl = "https://ems-backend-uat.vercel.app";
+  const BaseUrl = "https://ems.pertrade.co.in";
+//  const BaseUrl = "http://localhost:8080";
 
 export { BaseUrl };
 

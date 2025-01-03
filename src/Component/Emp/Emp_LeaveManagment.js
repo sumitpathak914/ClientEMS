@@ -126,13 +126,13 @@ const Emp_LeaveManagment = () => {
     }
     return (
         <>
-            <div className="flex justify-between">
-                <h2 className="mb-6 font-serif text-3xl font-bold text-gray-800">
+            <div className="flex justify-between p-5">
+                <h2 className="mb-6 text-3xl font-bold text-gray-800">
                     Leave Approval
                 </h2>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="p-2 py-3 mb-6 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                    className="p-2 py-3 mb-6 font-semibold text-white bg-blue-600 rounded-lg hover:bg-indigo-500"
                 >
                     Apply for Leave
                 </button>
@@ -209,14 +209,14 @@ const Emp_LeaveManagment = () => {
                     {
                         leaveRequests.length <= 0 && (
                             <>
-                                <p className="text-center text-gray-600 text-[20px] font-bold p-2">No Records Found</p>
+                                <p className="text-center text-gray-600 text-[15px] font-bold p-2">No Records Found</p>
                             </>
                         )
                     }
                     {isModalOpen && (
-                        <div className="fixed inset-0 flex items-center justify-center font-serif bg-black bg-opacity-50">
+                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                             <div className="w-[500px] p-6 bg-white rounded-lg shadow-lg h-[600px] overflow-auto">
-                                <h3 className="mb-4 font-serif text-xl font-semibold text-gray-700">
+                                <h3 className="mb-4 text-xl font-semibold text-gray-700">
                                     Apply for Leave
                                 </h3>
 

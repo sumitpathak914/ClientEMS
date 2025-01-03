@@ -23,7 +23,7 @@ function Emp_ClientManagement() {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen font-sans">
+    <div className="min-h-screen font-sans">
       <h2 className="text-3xl font-semibold text-gray-800 mb-6">Client Management</h2>
       <div className="flex items-center mb-6">
         {/* Search Bar */}
@@ -45,13 +45,13 @@ function Emp_ClientManagement() {
 
       {/* Client List */}
       <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
-        <thead className="bg-gray-100">
+        <thead className="bg-indigo-500 text-white">
           <tr>
-            <th className="p-4 text-left text-gray-600">Client ID</th>
-            <th className="p-4 text-left text-gray-600">Name</th>
-            <th className="p-4 text-left text-gray-600">Mobile Number</th>
-            <th className="p-4 text-left text-gray-600">Account Balance</th>
-            <th className="p-4 text-left text-gray-600">Actions</th>
+            <th className="p-4 text-left ">Client ID</th>
+            <th className="p-4 text-left ">Name</th>
+            <th className="p-4 text-left ">Mobile Number</th>
+            <th className="p-4 text-left ">Account Balance</th>
+            <th className="p-4 text-left ">Actions</th>
           </tr>
         </thead>
         <tbody>

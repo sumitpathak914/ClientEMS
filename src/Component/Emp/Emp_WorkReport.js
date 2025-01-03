@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import JoditEditor from "jodit-react";
 
 const Emp_WorkReport = () => {
   const [reports, setReports] = useState([]);
   const [showForm, setShowForm] = useState(false);
+
   const [newReport, setNewReport] = useState({
     date: "",
     task: "",
@@ -10,12 +12,10 @@ const Emp_WorkReport = () => {
   });
 
   const handleFilter = () => {
-    // Add filter logic here
     console.log("Filter applied");
   };
 
   const handleClear = () => {
-    // Clear filter logic
     console.log("Filters cleared");
   };
 
@@ -80,9 +80,8 @@ const Emp_WorkReport = () => {
                 {reports.map((report, index) => (
                   <tr
                     key={index}
-                    className={`${
-                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                    } hover:bg-blue-50`}
+                    className={`${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      } hover:bg-blue-50`}
                   >
                     <td className="px-6 py-4 border text-center">{report.date}</td>
                     <td className="px-6 py-4 border text-center">{report.task}</td>
@@ -98,8 +97,8 @@ const Emp_WorkReport = () => {
 
         {/* Add Report Form Modal */}
         {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
-            <div className="bg-white p-8 rounded-xl shadow-lg max-w-lg w-full">
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center overflow-auto">
+            <div className="bg-white p-8 rounded-xl shadow-lg w-[700px]">
               <h2 className="text-xl font-semibold text-gray-700 mb-4">
                 Add Work Report
               </h2>
@@ -122,15 +121,21 @@ const Emp_WorkReport = () => {
                   <label className="block text-gray-600 font-medium mb-2">
                     Task
                   </label>
-                  <input
-                    type="text"
-                    className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={newReport.task}
-                    onChange={(e) =>
-                      setNewReport({ ...newReport, task: e.target.value })
-                    }
-                    required
-                  />
+                  <div className="border border-gray-300 rounded-lg ">
+                    <JoditEditor
+                      value={newReport.task || ""}
+                      onBlur={(newContent) =>
+                        setNewReport({ ...newReport, task: newContent || "" })
+                      }
+                      config={{
+                        placeholder: "Start typing your task...",
+                        toolbarSticky: true,
+                        height: 300,
+                      }}
+                    />
+
+
+                  </div>
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-600 font-medium mb-2">
