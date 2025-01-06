@@ -70,17 +70,18 @@ const Emp_LeaveManagment = () => {
     const handleApply = async () => {
         try {
             // Replace with your backend endpoint URL
-            const response = await axios.post(`${BaseUrl}/api/leave/apply`, {
+            const response = await axios.post(`${BaseUrl}/api/apply`, {
+             
                 leaveType,
                 startDate,
                 endDate,
                 description,
                 name: userData.name,
-                empId: userData.empID, // Replace this with the actual employee ID from your app state or context
+                empId: userData.id,
             });
 
             if (response.status === 200) {
-                // Show success alert with SweetAlert
+              
                 Swal.fire({
                     icon: 'success',
                     title: 'Success!',
@@ -89,12 +90,12 @@ const Emp_LeaveManagment = () => {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         fetchLeaveRequests()
-                        closeModal(); // Close the modal after the user clicks "OK"
+                        closeModal(); 
                     }
                 });
 
                 console.log(response.data.reverse());
-                return; // Exit the function after handling success
+                return; 
             }
         } catch (error) {
             console.error('Error submitting leave application:', error);
@@ -102,11 +103,11 @@ const Emp_LeaveManagment = () => {
         }
     };
     const fetchLeaveRequests = async () => {
-        if (userData && userData.empID) {
+        if (userData && userData.id) {
             try {
-                const response = await axios.get(`${BaseUrl}/api/leave/employee/${userData.empID}`);
-                setLeaveRequests(response.data.data.leaveApplications.reverse());
-                setName(response.data.data.name)
+                const response = await axios.get(`${BaseUrl}/api/employee_Leave/${userData.id}`);
+                setLeaveRequests(response.data.data);
+                // setName(response.data.data.name)
             } catch (error) {
                 console.error("Error fetching leave requests:", error);
 
@@ -137,11 +138,11 @@ const Emp_LeaveManagment = () => {
                     Apply for Leave
                 </button>
             </div>
-            <div className="flex flex-col items-center py-8">
+            <div className="flex flex-col items-center ">
                 <div className="w-full bg-white rounded-lg shadow-md">
-                    <table className="w-full border-collapse">
-                        <thead>
-                            <tr className="text-white bg-indigo-500">
+                    <table className="w-full border border-collapse border-gray-300 border-collapsemin-w-full table-aut">
+                        {/* <thead>
+                            <tr className="text-white bg-indigo-700 border">
                                 <th className="px-4 py-2 text-left ">
                                     Employee Name
                                 </th>
@@ -157,24 +158,38 @@ const Emp_LeaveManagment = () => {
                                 </th>
                                 <th className="px-4 py-2 text-center ">Status</th>
                             </tr>
+                        </thead> */}
+                        <thead className="text-white bg-indigo-600">
+                            <tr>
+                                <th className="px-6 py-3 text-left border"> Employee Name</th>
+                                <th className="px-6 py-3 text-left border"> Leave Type</th>
+                                <th className="px-6 py-3 text-left border"> Start Date</th>
+                                <th className="px-6 py-3 text-left border"> End Date</th>
+                                <th className="px-6 py-3 text-left border"> Description</th>
+                             
+                                <th className="px-6 py-3 text-left border">Status</th>
+                                {/* {userData?.role === "HR" && (
+                                    <th className="px-6 py-3 text-left border">Action</th>
+                                )} */}
+                            </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody className="border">
 
                             {leaveRequests.map((request) => (
                                 <tr key={request.id} className="border-t">
-                                    <td className="px-4 py-3 text-gray-700">
-                                        {name}
+                                    <td className="px-4 py-3 text-gray-700 border">
+                                        {request.name}
                                     </td>
-                                    <td className="px-4 py-3 text-gray-600">{request.leaveType}</td>
-                                    <td className="px-4 py-3 text-gray-600">
+                                    <td className="px-4 py-3 text-gray-600 border">{request.leaveType}</td>
+                                    <td className="px-4 py-3 text-gray-600 border">
                                         {new Intl.DateTimeFormat("en-US", {
                                             year: "numeric",
                                             month: "long",
                                             day: "numeric",
                                         }).format(new Date(request.startDate))}
                                     </td>
-                                    <td className="px-4 py-3 text-gray-600">
+                                    <td className="px-4 py-3 text-gray-600 border">
                                         {new Intl.DateTimeFormat("en-US", {
                                             year: "numeric",
                                             month: "long",
@@ -182,7 +197,7 @@ const Emp_LeaveManagment = () => {
                                         }).format(new Date(request.endDate))}
                                     </td>
 
-                                    <td className="px-4 py-3 text-center text-gray-600">
+                                    <td className="px-4 py-3 text-center text-gray-600 border">
                                         <span
                                             className="cursor-pointer hover:underline"
                                             onClick={() => HandleOpenandView(request, "view")}
@@ -190,7 +205,7 @@ const Emp_LeaveManagment = () => {
                                             Click Here
                                         </span>
                                     </td>
-                                    <td className="px-4 py-3 text-center">
+                                    <td className="px-4 py-3 text-center border">
                                         <span
                                             className={`px-2 py-1 rounded-full text-sm font-semibold ${request.status === "Approved"
                                                     ? "bg-green-100 text-green-600"
